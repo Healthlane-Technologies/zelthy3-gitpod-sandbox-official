@@ -2,16 +2,18 @@
 image: gitpod/workspace-full:latest
 
 tasks:
-  - init: |
-      for i in $(seq 1 10); do
-        sudo sh -c 'echo "0.0.0.0 app$i.zelthy.com" >> /etc/hosts'
-      done
   - name: Initalize
     command: |
+      for i in $(seq 0 10); do
+        sudo sh -c "echo '0.0.0.0 app${i}.zelthy.com' >> /etc/hosts"
+      done
       pip install locust
-      git clone https://github.com/Healthlane-Technologies/zelthy3.git
+      if [ ! -d zelthy3 ]; then
+        git clone https://github.com/Healthlane-Technologies/zelthy3.git
+      fi
       cd zelthy3
       git checkout feat/loadtest
+      cd loadtest
       chmod +x loadtest.bash
 
 ports:
