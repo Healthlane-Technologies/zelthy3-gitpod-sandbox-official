@@ -4,19 +4,16 @@ image: gitpod/workspace-full:latest
 tasks:
   - init: |
       for i in $(seq 1 10); do
-        echo "0.0.0.0 app$i.zelthy.com" >> sudo tee -a /etc/hosts
+        sudo sh -c 'echo "0.0.0.0 app$i.zelthy.com" >> /etc/hosts'
       done
-  - name: Clone
-    command: git clone https://github.com/Healthlane-Technologies/zelthy3.git
-  - name: Checkout
-    before: cd zelthy3
-    command: git checkout feat/loadtest
-  - name: Set Permission
-    before: cd loadtest
-    command: chmod +x loadtest.bash
+  - name: Initalize
+    command: |
+      pip install locust
+      git clone https://github.com/Healthlane-Technologies/zelthy3.git
+      cd zelthy3
+      git checkout feat/loadtest
+      chmod +x loadtest.bash
 
 ports:
   - port: 8080
-    visibility: public
-  - port: 9090
     visibility: public
